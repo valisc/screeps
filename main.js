@@ -1,15 +1,15 @@
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
-var roleBuilder = require('role.repair');
+var roleRepair = require('role.repair');
 
 var BUILDER = 'builder';
 var UPGRADER = 'upgrader';
 var HARVESTER = 'harvester';
 var REPAIR = 'repair';
 
-var populate = function(role) {
-  if(_.filter(Game.creeps, (creep) => creep.memory.role == role).length < 2) {
+var populate = function(role, count) {
+  if(_.filter(Game.creeps, (creep) => creep.memory.role == role).length < count) {
     var size = [WORK,CARRY,MOVE];
     if(Game.spawns['Spawn1'].room.energyAvailable >= 550) {
       size = [WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE];
@@ -20,9 +20,10 @@ var populate = function(role) {
 }
 
 module.exports.loop = function () {
-  populate(BUILDER);
-  populate(UPGRADER);
-  populate(HARVESTER);
+  populate(BUILDER, 2);
+  populate(UPGRADER), 2;
+  populate(HARVESTER, 2);
+  populate(REPAIR, 1);
 
   for(var name in Game.creeps) {
     if(!Game.creeps[name]) {
@@ -45,8 +46,11 @@ module.exports.loop = function () {
         roleBuilder.run(creep);
       }
     }
-    if(creep.memory.role == BUILDER) {
+   if(creep.memory.role == BUILDER) {
       roleBuilder.run(creep);
+    } 
+   if(creep.memory.role == REPAIR) {
+      roleRepair.run(creep);
     }
   }
 }
