@@ -1,15 +1,17 @@
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
+var roleBuilder = require('role.repair');
 
 var BUILDER = 'builder';
 var UPGRADER = 'upgrader';
 var HARVESTER = 'harvester';
+var REPAIR = 'repair';
 
 var populate = function(role) {
   if(_.filter(Game.creeps, (creep) => creep.memory.role == role).length < 2) {
     var size = [WORK,CARRY,MOVE];
-    if(Game.spawns['Spawn1'].room.energyAvailable > 550) {
+    if(Game.spawns['Spawn1'].room.energyAvailable >= 550) {
       size = [WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE];
     }
     var newName = Game.spawns['Spawn1'].createCreep(size, undefined, {role: role});
@@ -39,7 +41,7 @@ module.exports.loop = function () {
     if(creep.memory.role == UPGRADER) {
       if(creep.room.controller.ticksToDowngrade < 1000) {
         roleUpgrader.run(creep);
-      } else {
+      } else { 
         roleBuilder.run(creep);
       }
     }
@@ -48,4 +50,3 @@ module.exports.loop = function () {
     }
   }
 }
-
