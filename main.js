@@ -11,16 +11,18 @@ var REPAIR = 'repair';
 var populate = function(role, count) {
   if(_.filter(Game.creeps, (creep) => creep.memory.role == role).length < count) {
     var size = [WORK,CARRY,MOVE];
-    if(Game.spawns['Spawn1'].room.energyAvailable >= 550) {
+    if(Game.spawns['Spawn1'].room.energyAvailable >= 550) { 
       size = [WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE];
+    } else if(Game.spawns['Spawn1'].room.energyAvailable >= 350) {
+      size = [WORK,WORK,CARRY,MOVE, MOVE];
     }
     var newName = Game.spawns['Spawn1'].createCreep(size, undefined, {role: role});
-    console.log('Spawning new '+ role +': ' + newName);
+    console.log('Spawning new '+ role +': ' + newName); 
   }
 }
 
 module.exports.loop = function () {
-  populate(BUILDER, 2);
+  populate(BUILDER, 3);
   populate(UPGRADER), 2;
   populate(HARVESTER, 2);
   populate(REPAIR, 1);
@@ -46,10 +48,10 @@ module.exports.loop = function () {
         roleBuilder.run(creep);
       }
     }
-   if(creep.memory.role == BUILDER) {
+    if(creep.memory.role == BUILDER) {
       roleBuilder.run(creep);
-    } 
-   if(creep.memory.role == REPAIR) {
+    }
+    if(creep.memory.role == REPAIR) {
       roleRepair.run(creep);
     }
   }
