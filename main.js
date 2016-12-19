@@ -30,13 +30,22 @@ module.exports.loop = function () {
 
     var creep = Game.creeps[name];
     if(creep.memory.role == HARVESTER ) {
-      roleHarvester.run(creep);
+      if(creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
+        roleHarvester.run(creep);
+      } else {
+        roleBuilder.run(creep);
+      }
     }
     if(creep.memory.role == UPGRADER) {
-      roleUpgrader.run(creep);
+      if(creep.room.controller.ticksToDowngrade < 1000) {
+        roleUpgrader.run(creep);
+      } else {
+        roleBuilder.run(creep);
+      }
     }
     if(creep.memory.role == BUILDER) {
       roleBuilder.run(creep);
     }
   }
 }
+
