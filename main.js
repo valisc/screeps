@@ -2,32 +2,40 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 
-module.exports.loop = function () {
+var BUILDER = 'builder';
+var UPGRADER = 'upgrader';
+var HARVESTER = 'harvester';
 
-  var tower = Game.getObjectById('287bffad563808848a64d9a6');
-  if(tower) {
-    var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-      filter: (structure) => structure.hits < structure.hitsMax
-    });
-    if(closestDamagedStructure) {
-      tower.repair(closestDamagedStructure);
+var populate = function(role) {
+  if(_.filter(Game.creeps, (creep) => creep.memory.role == role).length < 2) {
+    var size = [WORK,CARRY,MOVE];
+    if(Game.spawns['Spawn1'].room.energyAvailable > 550) {
+      size = [WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE];
     }
-
-    var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-    if(closestHostile) {
-      tower.attack(closestHostile);
-    }
+    var newName = Game.spawns['Spawn1'].createCreep(size, undefined, {role: role});
+    console.log('Spawning new '+ role +': ' + newName);
   }
+}
+
+module.exports.loop = function () {
+  populate(BUILDER);
+  populate(UPGRADER);
+  populate(HARVESTER);
 
   for(var name in Game.creeps) {
+    if(!Game.creeps[name]) {
+      delete Memory.creeps[name];
+      console.log('Clearing non-existing creep memory:', name);
+    }
+
     var creep = Game.creeps[name];
-    if(creep.memory.role == 'harvester') {
+    if(creep.memory.role == HARVESTER ) {
       roleHarvester.run(creep);
     }
-    if(creep.memory.role == 'upgrader') {
+    if(creep.memory.role == UPGRADER) {
       roleUpgrader.run(creep);
     }
-    if(creep.memory.role == 'builder') {
+    if(creep.memory.role == BUILDER) {
       roleBuilder.run(creep);
     }
   }
