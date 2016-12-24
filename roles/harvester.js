@@ -2,7 +2,6 @@ var roleHarvester = {
 
   /** @param {Creep} creep **/
   run: function(creep) {
-    creep.say('I harvest');
   	if(creep.carry.energy == 0 || creep.memory.hungry === undefined) {
         creep.memory.hungry = creep.pos.findClosestByRange(FIND_SOURCES).id;
     }

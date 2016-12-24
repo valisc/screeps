@@ -2,7 +2,6 @@ var roleEndOfLife = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        creep.say('I renew');
         if(creep.memory.renewing === undefined || creep.ticksToLive < 100) {
            creep.memory.renewing = true; 
         } else if(creep.ticksToLive >= 1400) {
@@ -14,7 +13,12 @@ var roleEndOfLife = {
                 creep.transfer(Game.spawns['Spawn1'], RESOURCE_ENERGY)
             }
             creep.say('renewing');
-            Game.spawns['Spawn1'].renewCreep(creep);
+            if(creep.memory.flagToRecycle == true) {
+                Game.spawns['Spawn1'].recycleCreep(creep);
+            } else {
+                Game.spawns['Spawn1'].renewCreep(creep);    
+            }
+            
         } else {
             creep.moveTo(Game.spawns['Spawn1']);
         }

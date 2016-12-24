@@ -2,7 +2,6 @@ var roleRepair = {
 
   /** @param {Creep} creep **/
   run: function(creep) {
-    creep.say('I repair');
     if(creep.memory.repairing && creep.carry.energy == 0) {
       creep.memory.repairing = false;
     }
@@ -13,7 +12,7 @@ var roleRepair = {
     if(creep.memory.repairing) {
       var damagedStructure = creep.pos.findClosestByRange(FIND_STRUCTURES, {filter: function(object){
         return (object.structureType != STRUCTURE_WALL && object.hits < object.hitsMax) ||
-        (object.structureType == STRUCTURE_WALL && object.hits < 15000);
+        (object.structureType == STRUCTURE_WALL && object.hits < 20000);
       }});
 
 

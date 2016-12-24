@@ -1,17 +1,23 @@
 var roleMiner = {
+   
+    
 
   /** @param {Creep} creep **/
   run: function(creep) {
-    creep.say('I mine');
+  
   	if(creep.carry.energy == 0 || creep.memory.hungry === undefined) {
   	    var isOtherMiner = (_creep) => {return _creep.memory.role === 'miner' && creep !== _creep; };
   	    var miners = _.filter(Game.creeps,isOtherMiner);
   	    var freeSource = creep.pos.findClosestByRange(FIND_SOURCES, {filter: (source) => {
-  	        return source.pos.findInRange(miners,3).length == 0;
+  	        return source.pos.findInRange(miners,1).length == 0;
   	    }});
-  	    creep.memory.hungry = freeSource.id;
+  	    if(freeSource !== null) {
+  	        creep.memory.hungry = freeSource.id;    
+  	    }
+  	    
     }
-    if(creep.carry.energy >= 48) {
+    var energyPerTick = creep.body.filter((part) => WORK).length * 2;
+    if(creep.carry.energy >= Math.floor(creep.carryCapacity / energyPerTick) * energyPerTick) {
         creep.memory.hungry = null;
     }
     
