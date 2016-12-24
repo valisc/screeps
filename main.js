@@ -7,6 +7,7 @@ var rolePorter = require('role.porter');
 var roleMiner = require('role.miner');
 var roleTower = require('role.tower');
 var roleKite = require('role.kite');
+var roleSolider = require('role.solider');
 
 var BUILDER = 'builder';
 var UPGRADER = 'upgrader';
@@ -37,12 +38,14 @@ var populate = function(role, count) {
 
 module.exports.loop = function () {
   //populate(7);
+  for(var name in Memory.creeps) {
+      if(!Game.creeps[name]) {
+          delete Memory.creeps[name];
+          console.log('Clearing non-existing creep memory:', name);    
+      }
+  }
+  
   for(var name in Game.creeps) {
-    if(!Game.creeps[name]) {
-      delete Memory.creeps[name];
-      console.log('Clearing non-existing creep memory:', name);
-    }
-
     var creep = Game.creeps[name];
     if(creep.ticksToLive < 100 || creep.memory.renewing || creep.memory.role == END_OF_LIFE) {
         roleEndOfLife.run(creep);
@@ -66,7 +69,7 @@ module.exports.loop = function () {
         
         if(creep.memory.role == SOLIDER) {
             creep.say("I fight");
-          roleKite.run(creep);
+          roleSolider.run(creep);
         }
         if(creep.memory.role == MINER) {
             creep.say("I mine");
