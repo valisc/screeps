@@ -19,6 +19,7 @@ var u = require('util');
 var tasks = [
   'tasks.move',
   'tasks.deposit',
+  'tasks.withdraw',
   'tasks.harvest'
 ].map((moduleName) => {
   var module = require(moduleName);
