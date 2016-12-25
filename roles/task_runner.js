@@ -59,7 +59,7 @@ var roleGeneralCreep = {
       var task = creep.memory.tasks[0];
       if(task) {
         var action = this.actions[task.actionType];
-        if(action && action(creep, task.params) == u.TASK_OK){
+        if(action && action(creep, ...task.params) == u.TASK_OK){
           console.log("Task OK");
           creep.memory.tasks.shift();
           if(creep.memory.tasks[0]) {

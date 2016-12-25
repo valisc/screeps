@@ -18,8 +18,8 @@ module.exports = {
       errors:[]
     }
   },
-  perform: (creep, params) => { // Params: RoomPosition
-    if(creep.pos.isNearTo(u.unpackPosition(params[0]))) {
+  perform: (creep, roomPosition) => { // Params: RoomPosition
+    if(creep.pos.isNearTo(u.unpackPosition(roomPosition))) {
       return u.TASK_OK;
     } else {
       return u.TASK_FAILED;
