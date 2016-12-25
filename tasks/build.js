@@ -2,7 +2,7 @@ var u = require('util');
 var type = "build";
 module.exports = {
   actionType: type,
-  apply: (constructionSite, resourceType, buildAmount) => {
+  apply: (constructionSite) => {
     var id = _.random(0, Number.MAX_SAFE_INTEGER);
 
     var _dest;
