@@ -13,23 +13,20 @@
 //   end
 // end
 // Game.spawns.Spawn1.createCreep([WORK,CARRY,MOVE], undefined, {tasks:[], path:[],navigationErrors:0,currentTaskId:-1});
-// Game.creeps.Colin.memory.tasks = [{id: 1, actionType: "move", params: [Game.getObjectById("e9fad649fe66e07cfa02c380").pos], location: Game.getObjectById("e9fad649fe66e07cfa02c380").pos, errors:[]}]
+// Game.creeps.Colin.memory.tasks = [{id: 1, type: "move", params: [Game.getObjectById("e9fad649fe66e07cfa02c380").pos], location: Game.getObjectById("e9fad649fe66e07cfa02c380").pos, errors:[]}]
 
 var u = require('util');
+var tasks = [
+  'tasks.move'
+].map((moduleName) => {
+  var module = require(moduleName);
+  var out = {};
+  out[module.actionType] = module.perform;
+  return out;
+});
 
 var roleGeneralCreep = {
-  actions: {
-    port: (creep, params) => {
-      return u.FAILED;
-    },
-    move: (creep, params) => { // Params: RoomPosition
-      if(creep.pos.isNearTo(u.unpackPosition(params[0]))) {
-        return u.TASK_OK;
-      } else {
-        return u.TASK_FAILED;
-      }
-    }
-  },
+  actions: Object.assign({}, ...tasks),
   // actions -> Map[ActionType, function[Params, SuccessResult]]
   // path -> Creeps Path
   // tasks -> List[Task]
@@ -65,7 +62,7 @@ var roleGeneralCreep = {
         if(action && action(creep, task.params) == u.TASK_OK){
           console.log("Task OK");
           creep.memory.tasks.shift();
-          if(creep.memory.tasks[0].location) {
+          if(creep.memory.tasks[0]) {
             creep.memory.path = creep.pos.findPathTo(u.unpackPosition(creep.memory.tasks[0].location));
           } else {
             creep.memory.taskId = -1;
