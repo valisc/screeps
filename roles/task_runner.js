@@ -17,7 +17,9 @@
 
 var u = require('util');
 var tasks = [
-  'tasks.move'
+  'tasks.move',
+  'tasks.deposit',
+  'tasks.harvest'
 ].map((moduleName) => {
   var module = require(moduleName);
   var out = {};
@@ -59,22 +61,28 @@ var roleGeneralCreep = {
       var task = creep.memory.tasks[0];
       if(task) {
         var action = this.actions[task.actionType];
-        if(action && action(creep, ...task.params) == u.TASK_OK){
-          console.log("Task OK");
-          creep.memory.tasks.shift();
-          if(creep.memory.tasks[0]) {
-            creep.memory.path = creep.pos.findPathTo(u.unpackPosition(creep.memory.tasks[0].location));
-          } else {
-            creep.memory.taskId = -1;
-          }
+        if(action) {
+          var outcome = action(creep, ...task.params);
+          if(outcome == u.TASK_COMPLETE){
+            console.log("Task OK");
+            creep.memory.tasks.shift();
+            if(creep.memory.tasks[0]) {
+              creep.memory.path = creep.pos.findPathTo(u.unpackPosition(creep.memory.tasks[0].location));
+            } else {
+              creep.memory.taskId = -1;
+            }
 
-        } else {
-          console.log("Task Failed");
-          //   retry
-          //   if retry > 3
-          //     aggregate logs
-          //     send email
+          } else if(outcome == u.TASK_FAILED) {
+            console.log("Task Failed");
+            //   retry
+            //   if retry > 3
+            //     aggregate logs
+            //     send email
+          } else if(outcome == u.TASK_ONGOING) {
+            // do nothing
+          }
         }
+        
       }
 
     }
