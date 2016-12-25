@@ -20,6 +20,8 @@ var tasks = [
   'tasks.move',
   'tasks.deposit',
   'tasks.withdraw',
+  'tasks.upgrade',
+  'tasks.repair',
   'tasks.build',
   'tasks.harvest'
 ].map((moduleName) => {
