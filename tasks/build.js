@@ -24,8 +24,6 @@ module.exports = {
     }
   },
   perform: (creep, constructionSiteId) => {
-      console.log("anything");
-      console.log(constructionSiteId);
     var outcome = creep.build(Game.getObjectById(constructionSiteId));
     if(outcome !== OK && outcome !== ERR_NOT_ENOUGH_RESOURCES) {
       return u.TASK_FAILED;
