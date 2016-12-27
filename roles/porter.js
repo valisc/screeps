@@ -42,31 +42,18 @@ var rolePorter = {
     var findSource = () => {
         var storageContainer = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
         var sources = creep.room.find(FIND_STRUCTURES, {filter: (structure) => {
-            return storageContainer.some((container) => {return container === structure.structureType}) &&
-                    structure.store[RESOURCE_ENERGY] > 0  && structure.room.find(FIND_SOURCES).some((source) => source.pos.getRangeTo(structure) <=2) ;
+            return (storageContainer.some((container) => {return container === structure.structureType}) &&
+                    structure.store[RESOURCE_ENERGY] > 0  && structure.room.find(FIND_SOURCES).some((source) => {return source.pos.getRangeTo(structure) <=2;})) ;
         }});
-        var sourceIndex = Math.floor(Game.time / 130) % sources.length;
-        return sources[sourceIndex];
-    };
-    /*
-    if(creep.memory.target === null || creep.memory.target === undefined) {
-        // find one
-        if(creep.carry.energy > 0) {
-            creep.memory.target = findDest();
-            
+        var link = Game.getObjectById("5860b4548d34adaf02bb525b");
+        if(link.energy > 0) {
+            return link;
         } else {
-            creep.memory.target = findSource();
+            var sourceIndex = Math.floor(Game.time / 130) % sources.length;
+            return sources[sourceIndex];    
         }
-        define if it is a withdraw or deposit
-    } else if(! creep.pos.isNearTo(creep.memory.target)) {
-        creep.moveTo(target);
-    } else {
-        if(creep.carry.energy > 0) {
-            creep.transfer(target,creep.carry.energy);
-        } else { // assume it is a withdraw
-            creep.withdraw(target, RESOURCE_ENERGY, creep.carryCapacity - creep.carry);
-        }
-    }*/
+        
+    };
     var dest = Game.getObjectById("58589b1bfb90299a321dd9c7");
     dest = Game.getObjectById('585c23fcc330fe943a04247f');
     var src = Game.getObjectById("58594ab6e7f714d4184322ea");

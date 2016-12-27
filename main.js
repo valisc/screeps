@@ -97,4 +97,5 @@ module.exports.loop = function () {
     }
   }
   roleTower.run(Game.getObjectById("585c527a86a777c82637fcba"));
+  roleTower.run(Game.getObjectById("58615ccddacba46869ff0e78"));
 }

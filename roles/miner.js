@@ -30,11 +30,15 @@ var roleMiner = {
     else {
       var target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (structure) => {
-          return structure.structureType === STRUCTURE_CONTAINER;
+          return structure.structureType === STRUCTURE_CONTAINER || structure.structureType === STRUCTURE_LINK;
         }
       });
 
       if(target !== null) {
+        if(target.energy > target.energyCapacity - 20) {
+            var centerLink = Game.getObjectById("5860b4548d34adaf02bb525b");
+            target.transferEnergy(centerLink, target.energy - centerLink.energy);
+        }
         if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
           creep.moveTo(target);
         }
